@@ -1,9 +1,15 @@
-global.expect = require('expect')
+global.expect = require('expect');
 
-const fs = require('fs')
-const jsdom = require('mocha-jsdom')
-const path = require('path')
+const fs = require('fs');
+const path = require('path');
+const { JSDOM } = require('jsdom');
 
-jsdom({
-  src: fs.readFileSync(path.resolve(__dirname, '..', 'index.js'), 'utf-8')
-})
+const html = fs.readFileSync(path.resolve(__dirname, '..', 'index.html'), 'utf-8');
+
+const dom = new JSDOM(html, {
+  resources: "usable",
+  runScripts: "dangerously",
+});
+
+global.window = dom.window;
+global.document = dom.window.document;
